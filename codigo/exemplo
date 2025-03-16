@@ -1,0 +1,62 @@
+// Product
+class Pizza {
+    private String massa;
+    private String molho;
+    private String ingrediente;
+
+    public void setMassa(String massa) { this.massa = massa; }
+    public void setMolho(String molho) { this.molho = molho; }
+    public void setIngrediente(String ingrediente) { this.ingrediente = ingrediente; }
+
+    @Override
+    public String toString() {
+        return "Pizza [massa=" + massa + ", molho=" + molho + ", ingrediente=" + ingrediente + "]";
+    }
+}
+
+// Builder Interface
+interface PizzaBuilder {
+    void setMassa();
+    void setMolho();
+    void addIngrediente();
+    Pizza getPizza();
+}
+
+// ConcreteBuilder
+class PizzaMargueritaBuilder implements PizzaBuilder {
+    private Pizza pizza = new Pizza();
+
+    @Override
+    public void setMassa() { pizza.setMassa("fina"); }
+    @Override
+    public void setMolho() { pizza.setMolho("tomate"); }
+    @Override
+    public void addIngrediente() { pizza.setIngrediente("queijo e manjericão"); }
+    @Override
+    public Pizza getPizza() { return pizza; }
+}
+
+// Director
+class PizzaChef {
+    private PizzaBuilder builder;
+
+    public void setBuilder(PizzaBuilder builder) { this.builder = builder; }
+
+    public Pizza construct() {
+        builder.setMassa();
+        builder.setMolho();
+        builder.addIngrediente();
+        return builder.getPizza();
+    }
+}
+
+// Cliente
+public class Main {
+    public static void main(String[] args) {
+        PizzaChef chef = new PizzaChef();
+        PizzaBuilder margueritaBuilder = new PizzaMargueritaBuilder();
+        chef.setBuilder(margueritaBuilder);
+        Pizza pizza = chef.construct();
+        System.out.println(pizza);
+    }
+}
